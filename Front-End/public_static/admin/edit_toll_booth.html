@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Toll Booth Manager</title>
+    <link rel="icon" href="../img/favicon.png" />
+	
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="css/icon.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+	<script src="../js/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src='../dist/TronWeb.min.js' type='text/javascript'></script>
+	<!--<script src='js/bootstrap.min.js' type='text/javascript'></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script src="../js/lib.js"></script>
+    <script src="js/main.js" type="text/javascript"></script>
+    <script>
+		$(document).ready(function(){
+			$('.modal').modal({dismissible: false});
+			//$('#adminModal').modal('open');
+			$('#waiting2').show(); 
+		});
+	</script>
+</head>
+<body>
+    <div class="waiting" id="waiting" style="display:none; top:50px;"></div>
+    <div class="waiting" id="waiting2" style="display:none;"><div class="progress" style="margin-top:3.3em"><div class="indeterminate"></div></div></div>
+    
+    <nav>
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper">
+            <i class="menu-left-btn fa fa-bars"></i>
+            <a href="index.html" style="float: left;margin-left: 4px;padding:0 20px">Admin</a>
+            <ul class="right">
+              <li><a href="#" onclick="$('#contractModal').modal('open')" data-target="dropdown-user">
+                <span style="font-size: 13px;margin: 0px 10px;">Contract</span> 
+                <i class="fa fa-fw fa-angle-down"></i>
+              </a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </nav>
+    
+    <div class="main row" style="margin-bottom:0;">
+        <div class="menu-left css_menu-left styleScrollBar">
+            <a class="per-group" href="index.html">
+                <span class="pg-title">Toll Booth List</span>
+            </a>
+            <p>&nbsp;</p>
+        </div>
+        
+        <div class="main-right">
+            <div class="title-module">
+                <i class="fa fa-fw fa-table"></i>
+                <span>toll booth details</span>
+            </div>
+            
+            <div class="area-new col" id="no_data" style="padding:10px 0;text-align:center;display:none;">No data found!</div>
+            <form class="area-new" id="admin-add-toll-booth" method="post" action="/admin/add-toll-booth">
+                <div class="input-field col s12">
+                    <div>Toll booth name <span class="field-required">*</span></div>
+                    <input type="text" class="input-customize validate" name="name" id="name" placeholder="toll booth name" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Location <span class="field-required">*</span></div>
+                    <input type="text" class="input-customize validate" name="location" id="location" placeholder="location" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Description <span class="field-required">*</span></div>
+                    <input type="text" class="input-customize validate" name="description" id="description" placeholder="description" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Investment (TBT | $) <span class="field-required">*</span></div>
+                    <input type="number" class="input-customize validate" name="investment" id="investment" step="0.01" pattern="\d+(\.\d{2})?" placeholder="0" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Start Time <span class="field-required">*</span></div>
+                    <input type="text" class="input-customize validate" name="startTime" id="startTime" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="YYYY-MM-DD" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Operator Unit <span class="field-required">*</span></div>
+                    <input type="text" class="input-customize validate" name="operatorUnit" id="operatorUnit" placeholder="company or organization" required autocomplete="off">
+                </div>
+                <div class="input-field col s12">
+                    <div>Tax Code <span class="field-required">*</span></div>
+                    <input type="number" class="input-customize validate" name="taxCode" id="taxCode" placeholder="0" required autocomplete="off">
+                </div>
+                <div class="col s12">
+                    <p>Activate</p>
+                    <div class="switch">
+                        <label>No
+                          <input type="checkbox" name="activate" id="activate">
+                          <span class="lever"></span> Yes
+                        </label>
+                    </div>
+                </div>	
+                
+                <div class="input-field col s12">
+                    <p>Image: recommended size 640x360 px, the extension is (jpg|jpeg|png) and max file size 1M</p> 
+                    <input type="file" name="filetoupload" id="filetoupload">
+                    <p><img class='tb-img' id='tb-img' src='../img/tollbooth.jpg'/></p>
+                </div>
+                
+                <div class="input-field col s12"><p><i>Note: 1 TBT (toll booth token) = 1 USD = 1 TRX (assuming)</i></p></div>
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light right btn-sm" type="submit">submit<i class="material-icons right">send</i></button>
+                </div>
+            </form>
+            
+            <div class="area-new" id="admin-create-ticket" style="margin-top: 10px;">
+                <div class="input-field col s12">
+                    <h5>Tickets <span class="small" id="tickets-title"></span></h5>
+                </div>
+                <table class="table-data-customize table-content" id="ticket-list-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Vehicles</th>
+                            <th>Payment Address</th>
+                            <th class="center-align">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="input-field col s12">
+                    <a class="waves-effect waves-light btn modal-trigger right" style="padding:0 15px;font-size:24px;" id="btn-create-ticket" href="#modal-create-ticket">+</a>
+                </div>
+            </div>
+            
+            <!-- Modal Create Ticket -->
+            <div id="modal-create-ticket" class="modal">
+                <form id="form-create-ticket" method="post" action="/admin">
+                <div class="modal-content">
+                    <h4>Create Ticket</h4>
+                        <div class="input-field">
+                            <div>Ticket name <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="ct-name" placeholder="ex: Ticket-A" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Price ($) <span class="field-required">*</span></div>
+                            <input type="number" step="0.001" pattern="\d+(\.\d{2})?" class="input-customize validate" id="ct-price" placeholder="ex: 5.2" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Vehicles <span class="field-required">*</span></div>
+                            if more than one vehicle group can use "/n" to distinguish.
+                            <input type="text" class="input-customize validate" id="ct-vehicles" placeholder="ex: car under 7 seats/npickup truck" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Payment Address <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="ct-paymentAddress" placeholder="ex: TTmnU2tTsgzgLtzKKwBHFsFiyoHbUrX4nE" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                        	<div>Examples of vehicle groups:</div>
+                        	<div style="font-size:13px;">1: Vehicles with less than 12 seats, trucks with a load of less than 2 tons, public transport buses</br>
+                        	2: Vehicles from 12 seats to 30 seats, trucks with loads from 2 tons to less than 4 tons</br>
+                        	3: Vehicles of 31 seats or more, trucks with loads from 4 tons to less than 10 tons</br>
+                        	4: Trucks with a load of 10 tons to less than 18 tons, trucks with 20-foot containers</br>
+                        	5: Trucks with a load of 18 tons or more, trucks with 40-foot containers</div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="waves-effect waves-light btn" type="submit">Create</button>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
+                </form>
+            </div>
+            
+            
+            <!-- Modal Edit Ticket -->
+            <div id="modal-edit-ticket" class="modal">
+                <form id="form-edit-ticket" method="post" action="/admin">
+                <div class="modal-content">
+                    <h4>Edit Ticket</h4>
+                        <div class="input-field">
+                            <div>Ticket name <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="et-name" placeholder="ex: Ticket-A" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Price ($) <span class="field-required">*</span></div>
+                            <input type="number" step="0.001" pattern="\d+(\.\d{2})?" class="input-customize validate" id="et-price" placeholder="ex: 5.2" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Vehicles <span class="field-required">*</span></div>
+                            if more than one vehicle group can use "/n" to distinguish.
+                            <input type="text" class="input-customize validate" id="et-vehicles" placeholder="ex: car under 7 seats/npickup truck" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Payment Address <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="et-paymentAddress" placeholder="ex: TTmnU2tTsgzgLtzKKwBHFsFiyoHbUrX4nE" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Version: <span id="et-version"></span></div>
+                        </div>
+                        <div class="input-field">
+                        	<div>Examples of vehicle groups:</div>
+                        	<div style="font-size:13px;">1: Vehicles with less than 12 seats, trucks with a load of less than 2 tons, public transport buses</br>
+                        	2: Vehicles from 12 seats to 30 seats, trucks with loads from 2 tons to less than 4 tons</br>
+                        	3: Vehicles of 31 seats or more, trucks with loads from 4 tons to less than 10 tons</br>
+                        	4: Trucks with a load of 10 tons to less than 18 tons, trucks with 20-foot containers</br>
+                        	5: Trucks with a load of 18 tons or more, trucks with 40-foot containers</div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="waves-effect waves-light btn" type="submit">Submit</button>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
+                </form>
+            </div>
+            
+            
+            <div class="area-new" id="admin-additional-repairs" style="margin-top: 10px;">
+                <div class="input-field col s12">
+                    <h5>Additional Repairs</h5>
+                </div>
+                <table class="table-data-customize table-content" id="repairs-list-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>Costs</th>
+                            <th>Description</th>
+                            <th class="center-align">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="input-field col s12">
+                    <a class="waves-effect waves-light btn modal-trigger right" style="padding:0 15px;font-size:24px;" id="btn-create-repair" href="#modal-create-repair">+</a>
+                </div>
+            </div>
+			
+            <!-- Modal Create Repair -->
+            <div id="modal-create-repair" class="modal">
+                <form id="form-create-repair" method="post" action="/admin">
+                <div class="modal-content">
+                    <h4>Create An Additional Repair</h4>
+                        <div class="input-field">
+                            <div>Time <span class="field-required">*</span></div>
+                    		<input type="text" class="input-customize validate" id="ar-time" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="YYYY-MM-DD" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Costs ($) <span class="field-required">*</span></div>
+                            <input type="number" step="0.001" pattern="\d+(\.\d{2})?" class="input-customize validate" id="ar-costs" placeholder="ex: 1000000" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Description <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="ar-description" placeholder="" required autocomplete="off">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="waves-effect waves-light btn" type="submit">Create</button>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
+                </form>
+            </div>
+			
+            <!-- Modal Edit Repair -->
+            <div id="modal-edit-repair" class="modal">
+                <form id="form-edit-repair" method="post" action="/admin">
+                <div class="modal-content">
+                    <h4>Edit Additional Repair</h4>
+                        <div class="input-field">
+                            <div>Time <span class="field-required">*</span></div>
+                    		<input type="text" class="input-customize validate" id="er-time" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" placeholder="YYYY-MM-DD" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Costs ($) <span class="field-required">*</span></div>
+                            <input type="number" step="0.001" pattern="\d+(\.\d{2})?" class="input-customize validate" id="er-costs" placeholder="ex: 1000000" required autocomplete="off">
+                        </div>
+                        <div class="input-field">
+                            <div>Description <span class="field-required">*</span></div>
+                            <input type="text" class="input-customize validate" id="er-description" placeholder="" required autocomplete="off">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="waves-effect waves-light btn" type="submit">Submit</button>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+                </div>
+                </form>
+            </div>
+            
+            
+            <div class="area-new" id="admin-status-tb" style="margin-top: 10px;">
+                <div class="input-field col s12">
+                    <h5>Status:</h5>
+                </div>
+                <div class="col s12" id="first-investment">
+                    First Investment: 0 $
+                </div>
+                <div class="input-field col s12" id="additional-investment">
+                    Additional Investment: 0 $
+                </div>
+                <div class="col s12" id="total-investment">
+                    Total Investment: 0 $
+                </div>
+                <div class="input-field col s12" id="total-revenue">
+                    Total Revenue: 0 $
+                </div>
+                <div class="col s12" style="font-weight:bold;" id="complete-target">
+                    Complete Target:
+                </div>
+            </div>
+            
+        
+            <div class="footer">
+                © 2018 Toll Booth Manager
+            </div>
+        </div>
+    </div>
+    
+       
+	<!-- Modal -->
+    <div id="tronLink-installModal" class="modal">
+        <div class="modal-content">
+             <div class="info">
+                <h4>TronLink Required</h4>
+                <p>To start you must install TronLink. TronLink is a TRON wallet for the browser. Once installed, return back and refresh the page.</p>
+                <p>You can be <a href="https://chrome.google.com/webstore/detail/ibnejdfjmmkpcnlpebklmnkoeoihofec/" target="_blank">installed from the Chrome Webstore</a>.</p>
+            </div>
+            <div style="text-align:center;"><img src="../img/TronLinkLogo.png" alt="TronLink logo"></div>
+        </div>
+    </div>
+    
+	<!-- Modal -->
+    <div id="tronLink-loginModal" class="modal">
+        <div class="modal-content">
+             <div class="info">
+                <h4>Log in Required</h4>
+                <p>TronLink is installed but you must first log in. Open TronLink from the browser bar and set up your first wallet or decrypt a previously-created wallet.</p>
+            </div>
+            <div style="text-align:center;"><img src="../img/TronLinkLogo.png" alt="TronLink logo"></div>
+        </div>
+    </div>
+    
+
+    
+	<!-- Modal -->
+    <div id="contractModal" class="modal">
+        <div class="modal-content">
+             <div class="info">
+                <h4>Smart Contract</h4>
+                <p id="contractaddresslink">Contract address:</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+          	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+    </div>
+    
+	<!-- Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+             <div class="info">
+                <h4>You are not an admin!</h4>
+                <p id="adminaddress">Admin address:</p>
+                <p id="youraddress">Your address:</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="js/admin_edit_toll_booth.js"></script>
+<script>
+	function confirmDelete() {
+		var check = confirm('Are you sure you want to delete ?')
+		if (check) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	//
+	var menu_left_show = false;
+	$('.menu-left-btn').click(function() {
+		if(menu_left_show){
+			var leftTo = "-200px";
+			menu_left_show = false;
+			$('#waiting').hide();
+		} else{
+			var leftTo = "0px";
+			menu_left_show = true;
+			$('#waiting').show();
+		}
+		$('.menu-left').animate({left: leftTo}, 200);
+	});
+	
+	$('#waiting').click(function() {
+		if(menu_left_show){
+			var leftTo = "-200px";
+			menu_left_show = false;
+			$('#waiting').hide();
+			$('.menu-left').animate({left: leftTo}, 200);
+		}
+	});
+</script>
+</html>
