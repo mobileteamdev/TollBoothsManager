@@ -1,4 +1,6 @@
 # TollBoothsManager
-deployed on Tron network (Shasta testnet)</br>
+Deployed on Tron network (Shasta testnet)</br>
 Tronlink wallet required</br>
-Demo: https://tollbooths.herokuapp.com
+Demo: https://tollbooths.herokuapp.com</br>
+Smart Contract: https://shasta.tronscan.org/#/contract/TTmnU2tTsgzgLtzKKwBHFsFiyoHbUrX4nE
+Video: https://www.youtube.com/watch?v=FNKekzG0NhE
